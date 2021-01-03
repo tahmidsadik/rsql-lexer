@@ -7,12 +7,21 @@ use lexer::lex::lex;
 #[cfg(test)]
 mod tests {
     use super::lex;
+    use crate::lexer::lex::tokenize;
+
+    // #[test]
+    // fn lex_sanity() {
+    //     let input_str = "select * from orders".to_string();
+    //
+    //     assert_eq!(lex(input_str).len(), 4);
+    // }
 
     #[test]
-    fn lex_sanity() {
-        let input_str = "select * from orders".to_string();
+    fn test_tokenize() {
+        let input_str = "select name from table";
 
-        assert_eq!(lex(input_str).len(), 4);
+        let (_, tokens) = tokenize(input_str, vec![]);
+        println!("tokens = {:?}", tokens);
     }
 
     #[test]

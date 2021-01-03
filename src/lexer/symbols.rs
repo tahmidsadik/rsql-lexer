@@ -1,7 +1,7 @@
 use std::option::Option;
 use std::string::String;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum Keyword {
     Select,
     Create,
@@ -65,16 +65,17 @@ impl FromString for Keyword {
             "like" => Some(Keyword::Like),
             "case" => Some(Keyword::Case),
             "primary key" => Some(Keyword::PrimaryKey),
-            "*" => Some(Keyword::Wildcard),
             _ => None,
         }
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Punctuation {
     Comma,
     SemiColon,
+    Wildcard,
+    Whitespace,
 }
 
 impl FromString for Punctuation {
@@ -82,6 +83,32 @@ impl FromString for Punctuation {
         match input.as_str() {
             "," => Some(Punctuation::Comma),
             ";" => Some(Punctuation::SemiColon),
+            "*" => Some(Punctuation::Wildcard),
+            " " => Some(Punctuation::Whitespace),
+            _ => None,
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub enum Operator {
+    GT,
+    GTE,
+    LT,
+    LTE,
+    Equal,
+    NotEqual,
+}
+
+impl FromString for Operator {
+    fn from_string(input: String) -> Option<Self> {
+        match input.as_str() {
+            ">" => Some(Operator::GT),
+            ">=" => Some(Operator::GTE),
+            "<" => Some(Operator::LT),
+            "<=" => Some(Operator::LTE),
+            "=" => Some(Operator::Equal),
+            "<>" => Some(Operator::NotEqual),
             _ => None,
         }
     }

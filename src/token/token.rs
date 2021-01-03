@@ -1,12 +1,13 @@
-use crate::lexer::symbols::{FromString, Keyword, Punctuation};
+use crate::lexer::symbols::{FromString, Keyword, Operator, Punctuation};
 use std::convert::From;
 
-#[derive(Debug)]
-enum TokenType {
+#[derive(Debug, Clone)]
+pub enum TokenType {
     Keyword(Keyword),
     Punctuation(Punctuation),
     Identifier(String),
-    //DataType e.g. Bool, Int, String, Float etc
+    Operator(Operator),
+    None, //DataType e.g. Bool, Int, String, Float etc
 }
 
 impl From<String> for TokenType {
@@ -16,16 +17,19 @@ impl From<String> for TokenType {
             Some(kw) => TokenType::Keyword(kw),
             None => match Punctuation::from_string(s.clone()) {
                 Some(pc) => TokenType::Punctuation(pc),
-                None => TokenType::Identifier(s),
+                None => match Operator::from_string(s.clone()) {
+                    Some(op) => TokenType::Operator(op),
+                    None => TokenType::Identifier(s),
+                },
             },
         }
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Token {
-    token_type: TokenType,
-    value: String,
+    pub token_type: TokenType,
+    pub value: String,
 }
 
 impl Token {
